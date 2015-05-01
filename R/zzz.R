@@ -26,19 +26,36 @@ payload <- function(filenames, description = "") {
 creategist <- function(filenames, description = "", public = TRUE) {
   filenames <- files_exist(filenames)
   files <- lapply(filenames, function(file) {
-    list(content = paste(readLines(file, warn = FALSE), collapse = "\n"))
+    list(content = paste(readLines(file, warn = FALSE, encoding = "UTF-8"), collapse = "\n"))
   })
-  names(files) <- basename(filenames)
+  names(files) <- sapply(filenames, basename)
   body <- list(description = description, public = public, files = files)
   jsonlite::toJSON(body, auto_unbox = TRUE)
 }
 
-unl <- function(x) if(!is.null(x)) do.call(c, x) else NULL
-unr <- function(x) if(!is.null(x)) unname(sapply(x, function(z) z[[1]])) else NULL
+creategist_obj <- function(z, description = "", public = TRUE, pretty = TRUE, filename = "file.txt") {
+  nm <- deparse(substitute(z))
+  if (pretty && any(is.data.frame(z) || is.matrix(z))) {
+    z <- list(list(content = paste0(knitr::kable(z), collapse = "\n")))
+  } else {
+    z <- list(list(content = as.character(jsonlite::toJSON(z, auto_unbox = TRUE))))
+  }
+  names(z) <- filename
+  body <- list(description = description, public = public, files = z)
+  jsonlite::toJSON(body, auto_unbox = TRUE)
+}
 
-mssg <- function(x, y) if(x) message(y)
+unl <- function(x) if (!is.null(x)) do.call(c, x) else NULL
+unr <- function(x) if (!is.null(x)) unname(sapply(x, function(z) z[[1]])) else NULL
+
+mssg <- function(x, y) if (x) message(y)
 
 gist_compact <- function(l) Filter(Negate(is.null), l)
+
+gc <- function(x) {
+  x <- gist_compact(x)
+  x[rapply(x, length) != 0]
+}
 
 ghbase <- function() 'https://api.github.com'
 
@@ -46,19 +63,18 @@ ghead <- function(){
   add_headers(`User-Agent` = "gistr", `Accept` = 'application/vnd.github.v3+json')
 }
 
-
 gist_GET <- function(url, auth, headers, args=list(), ...){
-  response <- GET(url, auth, headers, query=args, ...)
+  response <- GET(url, auth, headers, query = args, ...)
   process(response)
 }
 
 gist_PATCH <- function(id, auth, headers, body, ...){
-  response <- PATCH(paste0(ghbase(), '/gists/', id), auth, headers, body=body, encode = "json", ...)
+  response <- PATCH(paste0(ghbase(), '/gists/', id), auth, headers, body = body, encode = "json", ...)
   process(response)
 }
 
 gist_POST <- function(url, auth, headers, body, ...){
-  response <- POST(url, auth, headers, body=body, encode = "json", ...)
+  response <- POST(url, auth, headers, body = body, encode = "json", ...)
   process(response)
 }
 
@@ -71,10 +87,39 @@ gist_DELETE <- function(url, auth, headers, ...){
 }
 
 process <- function(x){
+  stopstatus(x)
   stopifnot(x$headers$`content-type` == 'application/json; charset=utf-8')
-  warn_for_status(x)
-  temp <- content(x, as = "text")
+  temp <- httr::content(x, as = "text")
   jsonlite::fromJSON(temp, FALSE)
 }
 
+stopstatus <- function(x) {
+  if (x$status_code > 203) {
+    res <- httr::content(x)
+    errs <- sapply(res$errors, function(z) paste(names(z), z, sep = ": ", collapse = "\n"))
+    stop(res$message, "\n", errs, call. = FALSE)
+  }
+}
+
 check_auth <- function(x) if(!missing(x)) x else gist_auth()
+
+strextract <- function(str, pattern) {
+  regmatches(str, regexpr(pattern, str))
+}
+
+strtrim <- function(str) {
+  gsub("^\\s+|\\s+$", "", str)
+}
+
+# pop columns or named elements out of lists
+pop <- function(x, topop, ...) {
+  UseMethod("pop")
+}
+
+pop.data.frame <- function(x, topop, ...) {
+  x[ !names(x) %in% topop, ]
+}
+
+pop.list <- function(x, topop, ...) {
+  x[ !names(x) %in% topop ]
+}

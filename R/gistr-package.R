@@ -13,11 +13,13 @@
 #' }
 #' 
 #' Using the \code{GITHUB_PAT} is recommended.
-#'
+#' 
 #' @name gistr-package
 #' @aliases gistr
 #' @docType package
 #' @title R client for GitHub gists
 #' @author Scott Chamberlain \email{myrmecocystus@@gmail.com}
+#' @author Ramnath Vaidyanathan \email{ramnath.vaidya@@gmail.com}
+#' @author Karthik Ram \email{karthik.ram@@gmail.com}
 #' @keywords package
 NULL

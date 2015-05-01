@@ -5,18 +5,6 @@
 
 <title>gistr tutorial</title>
 
-<script type="text/javascript">
-window.onload = function() {
-  var imgs = document.getElementsByTagName('img'), i, img;
-  for (i = 0; i < imgs.length; i++) {
-    img = imgs[i];
-    // center an image if it is the only element of its parent
-    if (img.parentElement.childElementCount === 1)
-      img.parentElement.style.textAlign = 'center';
-  }
-};
-</script>
-
 <!-- Styles for R syntax highlighter -->
 <style type="text/css">
    pre .operator,
@@ -57,6 +45,9 @@ var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/<
 hljs.initHighlightingOnLoad();
 </script>
 
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
 <style type="text/css">
@@ -69,7 +60,6 @@ body, td {
 body {
   max-width: 800px;
   margin: auto;
-  padding: 1em;
   line-height: 20px;
 }
 
@@ -77,28 +67,28 @@ tt, code, pre {
    font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
 }
 
-h1 {
-   font-size:2.2em;
+h1 { 
+   font-size:2.2em; 
 }
 
-h2 {
-   font-size:1.8em;
+h2 { 
+   font-size:1.8em; 
 }
 
-h3 {
-   font-size:1.4em;
+h3 { 
+   font-size:1.4em; 
 }
 
-h4 {
-   font-size:1.0em;
+h4 { 
+   font-size:1.0em; 
 }
 
-h5 {
-   font-size:0.9em;
+h5 { 
+   font-size:0.9em; 
 }
 
-h6 {
-   font-size:0.8em;
+h6 { 
+   font-size:0.8em; 
 }
 
 a:visited {
@@ -108,9 +98,7 @@ a:visited {
 pre, img {
   max-width: 100%;
 }
-pre {
-  overflow-x: auto;
-}
+
 pre code {
    display: block; padding: 0.5em;
 }
@@ -144,54 +132,54 @@ hr {
 }
 
 @media print {
-   * {
-      background: transparent !important;
-      color: black !important;
-      filter:none !important;
-      -ms-filter: none !important;
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
    }
 
-   body {
-      font-size:12pt;
-      max-width:100%;
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
    }
 
-   a, a:visited {
-      text-decoration: underline;
-   }
-
-   hr {
+   hr { 
       visibility: hidden;
       page-break-before: always;
    }
 
-   pre, blockquote {
-      padding-right: 1em;
-      page-break-inside: avoid;
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
    }
 
-   tr, img {
-      page-break-inside: avoid;
+   tr, img { 
+      page-break-inside: avoid; 
    }
 
-   img {
-      max-width: 100% !important;
+   img { 
+      max-width: 100% !important; 
    }
 
-   @page :left {
-      margin: 15mm 20mm 15mm 10mm;
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
    }
 
-   @page :right {
-      margin: 15mm 10mm 15mm 20mm;
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
    }
 
-   p, h2, h3 {
-      orphans: 3; widows: 3;
-   }
-
-   h2, h3 {
-      page-break-after: avoid;
+   h2, h3 { 
+      page-break-after: avoid; 
    }
 }
 </style>
@@ -266,8 +254,8 @@ update(g)
 </code></pre>
 
 <pre><code>#&gt; Rate limit: 5000
-#&gt; Remaining:  4992
-#&gt; Resets in:  58 minutes
+#&gt; Remaining:  4782
+#&gt; Resets in:  32 minutes
 </code></pre>
 
 <h2>List gists</h2>
@@ -278,20 +266,22 @@ update(g)
 </code></pre>
 
 <pre><code>#&gt; [[1]]
-#&gt; &lt;gist&gt;d4a9747a858eac277106
-#&gt;   URL: https://gist.github.com/d4a9747a858eac277106
-#&gt;   Description: A song created with http://www.danielx.net/composer/
+#&gt; &lt;gist&gt;0d0236018fd2e18f76eb
+#&gt;   URL: https://gist.github.com/0d0236018fd2e18f76eb
+#&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:47:55Z / 2015-01-02T21:47:55Z
-#&gt;   Files: data.json
+#&gt;   Created/Edited: 2015-05-01T04:10:13Z / 2015-05-01T04:10:13Z
+#&gt;   Files: concurrency-in-go.md
+#&gt;   Truncated?: FALSE
 #&gt; 
 #&gt; [[2]]
-#&gt; &lt;gist&gt;21e68cb744704829e97e
-#&gt;   URL: https://gist.github.com/21e68cb744704829e97e
-#&gt;   Description: dxdiag
+#&gt; &lt;gist&gt;cc1a45d62d544b2fbb68
+#&gt;   URL: https://gist.github.com/cc1a45d62d544b2fbb68
+#&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:47:50Z / 2015-01-02T21:47:51Z
-#&gt;   Files: dxdiag
+#&gt;   Created/Edited: 2015-05-01T04:10:13Z / 2015-05-01T04:10:15Z
+#&gt;   Files: alm.md, code.R
+#&gt;   Truncated?: FALSE, FALSE
 </code></pre>
 
 <p>Since a certain date/time</p>
@@ -300,20 +290,22 @@ update(g)
 </code></pre>
 
 <pre><code>#&gt; [[1]]
-#&gt; &lt;gist&gt;d4a9747a858eac277106
-#&gt;   URL: https://gist.github.com/d4a9747a858eac277106
-#&gt;   Description: A song created with http://www.danielx.net/composer/
+#&gt; &lt;gist&gt;0d0236018fd2e18f76eb
+#&gt;   URL: https://gist.github.com/0d0236018fd2e18f76eb
+#&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:47:55Z / 2015-01-02T21:47:55Z
-#&gt;   Files: data.json
+#&gt;   Created/Edited: 2015-05-01T04:10:13Z / 2015-05-01T04:10:13Z
+#&gt;   Files: concurrency-in-go.md
+#&gt;   Truncated?: FALSE
 #&gt; 
 #&gt; [[2]]
-#&gt; &lt;gist&gt;21e68cb744704829e97e
-#&gt;   URL: https://gist.github.com/21e68cb744704829e97e
-#&gt;   Description: dxdiag
+#&gt; &lt;gist&gt;cc1a45d62d544b2fbb68
+#&gt;   URL: https://gist.github.com/cc1a45d62d544b2fbb68
+#&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:47:50Z / 2015-01-02T21:47:51Z
-#&gt;   Files: dxdiag
+#&gt;   Created/Edited: 2015-05-01T04:10:13Z / 2015-05-01T04:10:15Z
+#&gt;   Files: alm.md, code.R
+#&gt;   Truncated?: FALSE, FALSE
 </code></pre>
 
 <p>Request different types of gists, one of public, minepublic, mineall, or starred.</p>
@@ -322,20 +314,22 @@ update(g)
 </code></pre>
 
 <pre><code>#&gt; [[1]]
-#&gt; &lt;gist&gt;d2383fe8a37bd98b5c2e
-#&gt;   URL: https://gist.github.com/d2383fe8a37bd98b5c2e
-#&gt;   Description: gist gist gist
+#&gt; &lt;gist&gt;cc1a45d62d544b2fbb68
+#&gt;   URL: https://gist.github.com/cc1a45d62d544b2fbb68
+#&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:09:26Z / 2015-01-02T21:09:54Z
-#&gt;   Files: stuff.md, zoo.json
+#&gt;   Created/Edited: 2015-05-01T04:10:13Z / 2015-05-01T04:10:15Z
+#&gt;   Files: alm.md, code.R
+#&gt;   Truncated?: FALSE, FALSE
 #&gt; 
 #&gt; [[2]]
-#&gt; &lt;gist&gt;81dca1f30ddc34a1b8f7
-#&gt;   URL: https://gist.github.com/81dca1f30ddc34a1b8f7
-#&gt;   Description: gist gist gist
+#&gt; &lt;gist&gt;a72d9b3b59844f82e87b
+#&gt;   URL: https://gist.github.com/a72d9b3b59844f82e87b
+#&gt;   Description: a new cool gist
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:06:57Z / 2015-01-02T21:11:45Z
-#&gt;   Files: stuff.md, zoo.json
+#&gt;   Created/Edited: 2015-05-01T04:10:12Z / 2015-05-01T04:10:12Z
+#&gt;   Files: stuff.md
+#&gt;   Truncated?: FALSE
 </code></pre>
 
 <h2>List a single gist</h2>
@@ -349,6 +343,7 @@ update(g)
 #&gt;   Public: TRUE
 #&gt;   Created/Edited: 2014-10-15T20:40:12Z / 2014-10-15T21:54:29Z
 #&gt;   Files: bitly_r.md
+#&gt;   Truncated?: FALSE
 </code></pre>
 
 <h2>Create gist</h2>
@@ -366,15 +361,16 @@ update(g)
 <pre><code class="r">gist_create(files=stuffpath, description=&#39;a new cool gist&#39;, browse = FALSE)
 </code></pre>
 
-<pre><code>#&gt; &lt;gist&gt;e6ebc9ef1959f968dd05
-#&gt;   URL: https://gist.github.com/e6ebc9ef1959f968dd05
+<pre><code>#&gt; &lt;gist&gt;ac19258b9bd255a09981
+#&gt;   URL: https://gist.github.com/ac19258b9bd255a09981
 #&gt;   Description: a new cool gist
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:47:57Z / 2015-01-02T21:47:57Z
+#&gt;   Created/Edited: 2015-05-01T04:10:34Z / 2015-05-01T04:10:34Z
 #&gt;   Files: stuff.md
+#&gt;   Truncated?: FALSE
 </code></pre>
 
-<p>Or, wrap <code>gist_create()</code> around some code in your R session/IDE, like so, with just the function name, and a <code>{&#39;</code> at the start and a <code>}&#39;</code> at the end.</p>
+<p>Or, wrap <code>gist_create()</code> around some code in your R session/IDE, like so, with just the function name, and a <code>{&#39;</code> at the start and a <code>&#39;}</code> at the end.</p>
 
 <pre><code class="r">gist_create(code={&#39;
 x &lt;- letters
@@ -385,12 +381,13 @@ numbers
 &#39;}, browse=FALSE)
 </code></pre>
 
-<pre><code>#&gt; &lt;gist&gt;0d241b7e1b87756cf916
-#&gt;   URL: https://gist.github.com/0d241b7e1b87756cf916
+<pre><code>#&gt; &lt;gist&gt;d5f968cef4c80e7ea9c3
+#&gt;   URL: https://gist.github.com/d5f968cef4c80e7ea9c3
 #&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:47:57Z / 2015-01-02T21:47:57Z
+#&gt;   Created/Edited: 2015-05-01T04:10:34Z / 2015-05-01T04:10:34Z
 #&gt;   Files: code.R
+#&gt;   Truncated?: FALSE
 </code></pre>
 
 <p>You can also knit an input file before posting as a gist:</p>
@@ -427,12 +424,13 @@ x &lt;- letters
 run(file, knitopts = list(quiet=TRUE)) %&gt;% gist_create(browse = FALSE)
 </code></pre>
 
-<pre><code>#&gt; &lt;gist&gt;4b9724a50787841be2f5
-#&gt;   URL: https://gist.github.com/4b9724a50787841be2f5
+<pre><code>#&gt; &lt;gist&gt;4febc43f823a3ecd6f7e
+#&gt;   URL: https://gist.github.com/4febc43f823a3ecd6f7e
 #&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:47:57Z / 2015-01-02T21:47:57Z
+#&gt;   Created/Edited: 2015-05-01T04:10:34Z / 2015-05-01T04:10:34Z
 #&gt;   Files: stuff.md
+#&gt;   Truncated?: FALSE
 </code></pre>
 
 <p>knit a code block (<code>knitr</code> code block notation missing, do add that in) (result not shown)</p>
@@ -455,9 +453,9 @@ x &lt;- letters
 
 <pre><code>#&gt; [[1]]
 #&gt; &lt;commit&gt;
-#&gt;   Version: a2df37e46b4be03de64243067f02377e295c78f7
+#&gt;   Version: 9eb068aef0f299cd011fc7b5db84237ce5b86e19
 #&gt;   User: sckott
-#&gt;   Commited: 2015-01-02T21:47:57Z
+#&gt;   Commited: 2015-05-01T04:10:34Z
 #&gt;   Commits [total, additions, deletions]: [5,5,0]
 </code></pre>
 
@@ -474,6 +472,7 @@ x &lt;- letters
 #&gt;   Public: TRUE
 #&gt;   Created/Edited: 2014-06-27T17:50:37Z / 2014-06-27T17:50:37Z
 #&gt;   Files: code.R, manifest.yml, rrt_manifest.yml
+#&gt;   Truncated?: FALSE, FALSE, FALSE
 </code></pre>
 
 <p>Unstar</p>
@@ -487,6 +486,7 @@ x &lt;- letters
 #&gt;   Public: TRUE
 #&gt;   Created/Edited: 2014-06-27T17:50:37Z / 2014-06-27T17:50:37Z
 #&gt;   Files: code.R, manifest.yml, rrt_manifest.yml
+#&gt;   Truncated?: FALSE, FALSE, FALSE
 </code></pre>
 
 <h2>Update a gist</h2>
@@ -495,7 +495,7 @@ x &lt;- letters
 
 <p>First, path to file</p>
 
-<pre><code class="r">file &lt;- system.file(&quot;examples&quot;, &quot;alm_othersources.md&quot;, package = &quot;gistr&quot;)
+<pre><code class="r">file &lt;- system.file(&quot;examples&quot;, &quot;alm.md&quot;, package = &quot;gistr&quot;)
 </code></pre>
 
 <pre><code class="r">gists(what = &quot;minepublic&quot;)[[1]] %&gt;%
@@ -503,27 +503,20 @@ x &lt;- letters
   update()
 </code></pre>
 
-<pre><code>#&gt; &lt;gist&gt;0d241b7e1b87756cf916
-#&gt;   URL: https://gist.github.com/0d241b7e1b87756cf916
+<pre><code>#&gt; &lt;gist&gt;d5f968cef4c80e7ea9c3
+#&gt;   URL: https://gist.github.com/d5f968cef4c80e7ea9c3
 #&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:47:57Z / 2015-01-02T21:47:59Z
-#&gt;   Files: alm_othersources.md, code.R
+#&gt;   Created/Edited: 2015-05-01T04:10:34Z / 2015-05-01T04:10:36Z
+#&gt;   Files: alm.md, code.R
+#&gt;   Truncated?: FALSE, FALSE
 </code></pre>
 
 <p>Delete files</p>
 
-<pre><code class="r">gists(what = &quot;minepublic&quot;)[[1]] %&gt;%
-  delete_files(file) %&gt;%
+<pre><code class="r">gists(what = &quot;minepublic&quot;)[[1]]
+  delete_files(&quot;code.R&quot;) %&gt;%
   update()
-</code></pre>
-
-<pre><code>#&gt; &lt;gist&gt;0d241b7e1b87756cf916
-#&gt;   URL: https://gist.github.com/0d241b7e1b87756cf916
-#&gt;   Description: 
-#&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:47:57Z / 2015-01-02T21:48:00Z
-#&gt;   Files: code.R
 </code></pre>
 
 <h2>Open a gist in your default browser</h2>
@@ -540,7 +533,7 @@ x &lt;- letters
 <pre><code class="r">gists()[[1]] %&gt;% embed()
 </code></pre>
 
-<pre><code>#&gt; [1] &quot;&lt;script src=\&quot;https://gist.github.com/openpanzer/b7415fca02984c72853b.js\&quot;&gt;&lt;/script&gt;&quot;
+<pre><code>#&gt; [1] &quot;&lt;script src=\&quot;https://gist.github.com/sckott/d5f968cef4c80e7ea9c3.js\&quot;&gt;&lt;/script&gt;&quot;
 </code></pre>
 
 <h3>List forks</h3>
@@ -555,16 +548,18 @@ x &lt;- letters
 #&gt;   URL: https://gist.github.com/1642989
 #&gt;   Description: Spline Transition
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2012-01-19T21:45:20Z / 2014-12-10T03:25:19Z
+#&gt;   Created/Edited: 2012-01-19T21:45:20Z / 2015-04-15T10:16:23Z
 #&gt;   Files: 
+#&gt;   Truncated?: 
 #&gt; 
 #&gt; [[2]]
 #&gt; &lt;gist&gt;1643051
 #&gt;   URL: https://gist.github.com/1643051
 #&gt;   Description: Line Transition (Broken)
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2012-01-19T21:51:30Z / 2014-04-09T03:11:36Z
-#&gt;   Files:
+#&gt;   Created/Edited: 2012-01-19T21:51:30Z / 2015-04-15T10:16:33Z
+#&gt;   Files: 
+#&gt;   Truncated?:
 </code></pre>
 
 <h2>Fork a gist</h2>
@@ -575,12 +570,13 @@ x &lt;- letters
 (forked &lt;- g[[ sample(seq_along(g), 1) ]] %&gt;% fork())
 </code></pre>
 
-<pre><code>#&gt; &lt;gist&gt;32a3de9397a9387c9c5b
-#&gt;   URL: https://gist.github.com/32a3de9397a9387c9c5b
-#&gt;   Description: Bootstrap Customizer Config
+<pre><code>#&gt; &lt;gist&gt;198a3d98aefe5432cedd
+#&gt;   URL: https://gist.github.com/198a3d98aefe5432cedd
+#&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-01-02T21:48:01Z / 2015-01-02T21:48:01Z
-#&gt;   Files: config.json
+#&gt;   Created/Edited: 2015-05-01T04:10:37Z / 2015-05-01T04:10:37Z
+#&gt;   Files: Servidor.js
+#&gt;   Truncated?: FALSE
 </code></pre>
 
 <h2>Example use case</h2>

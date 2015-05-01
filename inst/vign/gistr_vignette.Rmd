@@ -123,7 +123,7 @@ gist_create(files=stuffpath, description='a new cool gist')
 gist_create(files=stuffpath, description='a new cool gist', browse = FALSE)
 ```
 
-Or, wrap `gist_create()` around some code in your R session/IDE, like so, with just the function name, and a `{'` at the start and a `}'` at the end.
+Or, wrap `gist_create()` around some code in your R session/IDE, like so, with just the function name, and a `{'` at the start and a `'}` at the end.
 
 ```{r}
 gist_create(code={'
@@ -218,7 +218,7 @@ Add files
 First, path to file
 
 ```{r}
-file <- system.file("examples", "alm_othersources.md", package = "gistr")
+file <- system.file("examples", "alm.md", package = "gistr")
 ```
 
 ```{r}
@@ -229,9 +229,9 @@ gists(what = "minepublic")[[1]] %>%
 
 Delete files
 
-```{r}
-gists(what = "minepublic")[[1]] %>%
-  delete_files(file) %>%
+```{r eval=FALSE}
+gists(what = "minepublic")[[1]]
+  delete_files("code.R") %>%
   update()
 ```
 
