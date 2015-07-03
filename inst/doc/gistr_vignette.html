@@ -5,6 +5,18 @@
 
 <title>gistr tutorial</title>
 
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
 <!-- Styles for R syntax highlighter -->
 <style type="text/css">
    pre .operator,
@@ -45,9 +57,6 @@ var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/<
 hljs.initHighlightingOnLoad();
 </script>
 
-<!-- MathJax scripts -->
-<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
 
 
 <style type="text/css">
@@ -60,6 +69,7 @@ body, td {
 body {
   max-width: 800px;
   margin: auto;
+  padding: 1em;
   line-height: 20px;
 }
 
@@ -67,28 +77,28 @@ tt, code, pre {
    font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
 }
 
-h1 { 
-   font-size:2.2em; 
+h1 {
+   font-size:2.2em;
 }
 
-h2 { 
-   font-size:1.8em; 
+h2 {
+   font-size:1.8em;
 }
 
-h3 { 
-   font-size:1.4em; 
+h3 {
+   font-size:1.4em;
 }
 
-h4 { 
-   font-size:1.0em; 
+h4 {
+   font-size:1.0em;
 }
 
-h5 { 
-   font-size:0.9em; 
+h5 {
+   font-size:0.9em;
 }
 
-h6 { 
-   font-size:0.8em; 
+h6 {
+   font-size:0.8em;
 }
 
 a:visited {
@@ -98,7 +108,9 @@ a:visited {
 pre, img {
   max-width: 100%;
 }
-
+pre {
+  overflow-x: auto;
+}
 pre code {
    display: block; padding: 0.5em;
 }
@@ -132,54 +144,54 @@ hr {
 }
 
 @media print {
-   * { 
-      background: transparent !important; 
-      color: black !important; 
-      filter:none !important; 
-      -ms-filter: none !important; 
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
    }
 
-   body { 
-      font-size:12pt; 
-      max-width:100%; 
-   }
-       
-   a, a:visited { 
-      text-decoration: underline; 
+   body {
+      font-size:12pt;
+      max-width:100%;
    }
 
-   hr { 
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
       visibility: hidden;
       page-break-before: always;
    }
 
-   pre, blockquote { 
-      padding-right: 1em; 
-      page-break-inside: avoid; 
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
    }
 
-   tr, img { 
-      page-break-inside: avoid; 
+   tr, img {
+      page-break-inside: avoid;
    }
 
-   img { 
-      max-width: 100% !important; 
+   img {
+      max-width: 100% !important;
    }
 
-   @page :left { 
-      margin: 15mm 20mm 15mm 10mm; 
-   }
-     
-   @page :right { 
-      margin: 15mm 10mm 15mm 20mm; 
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
    }
 
-   p, h2, h3 { 
-      orphans: 3; widows: 3; 
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
    }
 
-   h2, h3 { 
-      page-break-after: avoid; 
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
    }
 }
 </style>
@@ -192,6 +204,7 @@ hr {
 <!--
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{gistr vignette}
+%\VignetteEncoding{UTF-8}
 -->
 
 <h1>gistr tutorial</h1>
@@ -231,21 +244,23 @@ hr {
 
 <p>In <code>gistr</code> you can use pipes, introduced perhaps first in R in the package <code>magrittr</code>, to pass outputs from one function to another. If you have used <code>dplyr</code> with pipes you can see the difference, and perhaps the utility, of this workflow over the traditional workflow in R. You can use a non-piping or a piping workflow with <code>gistr</code>. Examples below use a mix of both workflows. Here is an example of a piping wofklow (with some explanation):</p>
 
-<pre><code class="r">gists(what = &quot;minepublic&quot;)[[6]] %&gt;% # List my public gists, and index 1st
-  add_files(&quot;~/alm_othersources.md&quot;) %&gt;% # Add new file to that gist
+<pre><code class="r">file &lt;- system.file(&quot;examples&quot;, &quot;stuff.Rmd&quot;, package = &quot;gistr&quot;)
+gists(what = &quot;minepublic&quot;)[[1]] %&gt;% # List my public gists, and index 1st
+  add_files(file) %&gt;% # Add new file to that gist
   update() # update sends a PATCH command to Gists API to add file to your gist
 </code></pre>
 
 <p>And a non-piping workflow that does the same exact thing:</p>
 
-<pre><code class="r">g &lt;- gists(what = &quot;minepublic&quot;)[[1]]
-g &lt;- add_files(g, &quot;~/alm_othersources.md&quot;)
+<pre><code class="r">file &lt;- system.file(&quot;examples&quot;, &quot;example1.md&quot;, package = &quot;gistr&quot;)
+g &lt;- gists(what = &quot;minepublic&quot;)[[1]]
+g &lt;- add_files(g, file)
 update(g)
 </code></pre>
 
 <p>Or you could string them all together in one line (but it&#39;s rather difficult to follow what&#39;s going on because you have to read from the inside out)</p>
 
-<pre><code class="r">update(add_files(gists(what = &quot;minepublic&quot;)[[1]], &quot;~/alm_othersources.md&quot;))
+<pre><code class="r">update(add_files(gists(what = &quot;minepublic&quot;)[[1]], file))
 </code></pre>
 
 <h2>Rate limit information</h2>
@@ -254,8 +269,8 @@ update(g)
 </code></pre>
 
 <pre><code>#&gt; Rate limit: 5000
-#&gt; Remaining:  4782
-#&gt; Resets in:  32 minutes
+#&gt; Remaining:  4908
+#&gt; Resets in:  49 minutes
 </code></pre>
 
 <h2>List gists</h2>
@@ -266,46 +281,46 @@ update(g)
 </code></pre>
 
 <pre><code>#&gt; [[1]]
-#&gt; &lt;gist&gt;0d0236018fd2e18f76eb
-#&gt;   URL: https://gist.github.com/0d0236018fd2e18f76eb
-#&gt;   Description: 
+#&gt; &lt;gist&gt;9a61e3d5b74722824309
+#&gt;   URL: https://gist.github.com/9a61e3d5b74722824309
+#&gt;   Description: FunctionSet model for Chainer based Convolutional Denoising Autoencoder
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:13Z / 2015-05-01T04:10:13Z
-#&gt;   Files: concurrency-in-go.md
+#&gt;   Created/Edited: 2015-07-03T00:20:15Z / 2015-07-03T00:20:16Z
+#&gt;   Files: conv_dae.py
 #&gt;   Truncated?: FALSE
 #&gt; 
 #&gt; [[2]]
-#&gt; &lt;gist&gt;cc1a45d62d544b2fbb68
-#&gt;   URL: https://gist.github.com/cc1a45d62d544b2fbb68
-#&gt;   Description: 
+#&gt; &lt;gist&gt;4ae08d3a0bc3ac4862da
+#&gt;   URL: https://gist.github.com/4ae08d3a0bc3ac4862da
+#&gt;   Description: Bootstrap Customizer Config
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:13Z / 2015-05-01T04:10:15Z
-#&gt;   Files: alm.md, code.R
-#&gt;   Truncated?: FALSE, FALSE
+#&gt;   Created/Edited: 2015-07-03T00:19:29Z / 2015-07-03T00:19:29Z
+#&gt;   Files: config.json
+#&gt;   Truncated?: FALSE
 </code></pre>
 
 <p>Since a certain date/time</p>
 
-<pre><code class="r">gists(since=&#39;2014-05-26T00:00:00Z&#39;, per_page = 2)
+<pre><code class="r">gists(since = &#39;2014-05-26T00:00:00Z&#39;, per_page = 2)
 </code></pre>
 
 <pre><code>#&gt; [[1]]
-#&gt; &lt;gist&gt;0d0236018fd2e18f76eb
-#&gt;   URL: https://gist.github.com/0d0236018fd2e18f76eb
-#&gt;   Description: 
+#&gt; &lt;gist&gt;9a61e3d5b74722824309
+#&gt;   URL: https://gist.github.com/9a61e3d5b74722824309
+#&gt;   Description: FunctionSet model for Chainer based Convolutional Denoising Autoencoder
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:13Z / 2015-05-01T04:10:13Z
-#&gt;   Files: concurrency-in-go.md
+#&gt;   Created/Edited: 2015-07-03T00:20:15Z / 2015-07-03T00:20:16Z
+#&gt;   Files: conv_dae.py
 #&gt;   Truncated?: FALSE
 #&gt; 
 #&gt; [[2]]
-#&gt; &lt;gist&gt;cc1a45d62d544b2fbb68
-#&gt;   URL: https://gist.github.com/cc1a45d62d544b2fbb68
-#&gt;   Description: 
+#&gt; &lt;gist&gt;4ae08d3a0bc3ac4862da
+#&gt;   URL: https://gist.github.com/4ae08d3a0bc3ac4862da
+#&gt;   Description: Bootstrap Customizer Config
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:13Z / 2015-05-01T04:10:15Z
-#&gt;   Files: alm.md, code.R
-#&gt;   Truncated?: FALSE, FALSE
+#&gt;   Created/Edited: 2015-07-03T00:19:29Z / 2015-07-03T00:19:29Z
+#&gt;   Files: config.json
+#&gt;   Truncated?: FALSE
 </code></pre>
 
 <p>Request different types of gists, one of public, minepublic, mineall, or starred.</p>
@@ -314,20 +329,20 @@ update(g)
 </code></pre>
 
 <pre><code>#&gt; [[1]]
-#&gt; &lt;gist&gt;cc1a45d62d544b2fbb68
-#&gt;   URL: https://gist.github.com/cc1a45d62d544b2fbb68
+#&gt; &lt;gist&gt;4fd5a913e911ad70098c
+#&gt;   URL: https://gist.github.com/4fd5a913e911ad70098c
 #&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:13Z / 2015-05-01T04:10:15Z
-#&gt;   Files: alm.md, code.R
-#&gt;   Truncated?: FALSE, FALSE
+#&gt;   Created/Edited: 2015-07-03T00:19:18Z / 2015-07-03T00:19:22Z
+#&gt;   Files: code.R
+#&gt;   Truncated?: FALSE
 #&gt; 
 #&gt; [[2]]
-#&gt; &lt;gist&gt;a72d9b3b59844f82e87b
-#&gt;   URL: https://gist.github.com/a72d9b3b59844f82e87b
+#&gt; &lt;gist&gt;974fd41ff30de9814cc1
+#&gt;   URL: https://gist.github.com/974fd41ff30de9814cc1
 #&gt;   Description: a new cool gist
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:12Z / 2015-05-01T04:10:12Z
+#&gt;   Created/Edited: 2015-07-03T00:19:18Z / 2015-07-03T00:19:18Z
 #&gt;   Files: stuff.md
 #&gt;   Truncated?: FALSE
 </code></pre>
@@ -355,37 +370,37 @@ update(g)
 <pre><code class="r">stuffpath &lt;- system.file(&quot;examples&quot;, &quot;stuff.md&quot;, package = &quot;gistr&quot;)
 </code></pre>
 
-<pre><code class="r">gist_create(files=stuffpath, description=&#39;a new cool gist&#39;)
+<pre><code class="r">gist_create(files = stuffpath, description = &#39;a new cool gist&#39;)
 </code></pre>
 
-<pre><code class="r">gist_create(files=stuffpath, description=&#39;a new cool gist&#39;, browse = FALSE)
+<pre><code class="r">gist_create(files = stuffpath, description = &#39;a new cool gist&#39;, browse = FALSE)
 </code></pre>
 
-<pre><code>#&gt; &lt;gist&gt;ac19258b9bd255a09981
-#&gt;   URL: https://gist.github.com/ac19258b9bd255a09981
+<pre><code>#&gt; &lt;gist&gt;f6d0df13305a082f5247
+#&gt;   URL: https://gist.github.com/f6d0df13305a082f5247
 #&gt;   Description: a new cool gist
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:34Z / 2015-05-01T04:10:34Z
+#&gt;   Created/Edited: 2015-07-03T00:20:27Z / 2015-07-03T00:20:27Z
 #&gt;   Files: stuff.md
 #&gt;   Truncated?: FALSE
 </code></pre>
 
 <p>Or, wrap <code>gist_create()</code> around some code in your R session/IDE, like so, with just the function name, and a <code>{&#39;</code> at the start and a <code>&#39;}</code> at the end.</p>
 
-<pre><code class="r">gist_create(code={&#39;
+<pre><code class="r">gist_create(code = {&#39;
 x &lt;- letters
 numbers &lt;- runif(8)
 numbers
 
 [1] 0.3229318 0.5933054 0.7778408 0.3898947 0.1309717 0.7501378 0.3206379 0.3379005
-&#39;}, browse=FALSE)
+&#39;}, browse = FALSE)
 </code></pre>
 
-<pre><code>#&gt; &lt;gist&gt;d5f968cef4c80e7ea9c3
-#&gt;   URL: https://gist.github.com/d5f968cef4c80e7ea9c3
+<pre><code>#&gt; &lt;gist&gt;f80330754db203f8bb03
+#&gt;   URL: https://gist.github.com/f80330754db203f8bb03
 #&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:34Z / 2015-05-01T04:10:34Z
+#&gt;   Created/Edited: 2015-07-03T00:20:27Z / 2015-07-03T00:20:27Z
 #&gt;   Files: code.R
 #&gt;   Truncated?: FALSE
 </code></pre>
@@ -393,7 +408,7 @@ numbers
 <p>You can also knit an input file before posting as a gist:</p>
 
 <pre><code class="r">file &lt;- system.file(&quot;examples&quot;, &quot;stuff.Rmd&quot;, package = &quot;gistr&quot;)
-gist_create(file, description=&#39;a new cool gist&#39;, knit=TRUE)
+gist_create(file, description = &#39;a new cool gist&#39;, knit = TRUE)
 #&gt; &lt;gist&gt;4162b9c53479fbc298db
 #&gt;   URL: https://gist.github.com/4162b9c53479fbc298db
 #&gt;   Description: a new cool gist
@@ -404,10 +419,10 @@ gist_create(file, description=&#39;a new cool gist&#39;, knit=TRUE)
 
 <p>Or code blocks before (note that code blocks without knitr block demarcations will result in unexecuted code):</p>
 
-<pre><code class="r">gist_create(code={&#39;
+<pre><code class="r">gist_create(code = {&#39;
 x &lt;- letters
 (numbers &lt;- runif(8))
-&#39;}, knit=TRUE)
+&#39;}, knit = TRUE)
 #&gt; &lt;gist&gt;ec45c396dee4aa492139
 #&gt;   URL: https://gist.github.com/ec45c396dee4aa492139
 #&gt;   Description:
@@ -421,14 +436,14 @@ x &lt;- letters
 <p>knit a local file</p>
 
 <pre><code class="r">file &lt;- system.file(&quot;examples&quot;, &quot;stuff.Rmd&quot;, package = &quot;gistr&quot;)
-run(file, knitopts = list(quiet=TRUE)) %&gt;% gist_create(browse = FALSE)
+run(file, knitopts = list(quiet = TRUE)) %&gt;% gist_create(browse = FALSE)
 </code></pre>
 
-<pre><code>#&gt; &lt;gist&gt;4febc43f823a3ecd6f7e
-#&gt;   URL: https://gist.github.com/4febc43f823a3ecd6f7e
+<pre><code>#&gt; &lt;gist&gt;f6214845b1f64dac34e9
+#&gt;   URL: https://gist.github.com/f6214845b1f64dac34e9
 #&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:34Z / 2015-05-01T04:10:34Z
+#&gt;   Created/Edited: 2015-07-03T00:20:27Z / 2015-07-03T00:20:27Z
 #&gt;   Files: stuff.md
 #&gt;   Truncated?: FALSE
 </code></pre>
@@ -438,7 +453,7 @@ run(file, knitopts = list(quiet=TRUE)) %&gt;% gist_create(browse = FALSE)
 <pre><code class="r">run({&#39;
 x &lt;- letters
 (numbers &lt;- runif(8))
-&#39;}) %&gt;% gist_create
+&#39;}) %&gt;% gist_create()
 </code></pre>
 
 <p>knit a file from a gist, has to get file first (result not shown)</p>
@@ -453,9 +468,9 @@ x &lt;- letters
 
 <pre><code>#&gt; [[1]]
 #&gt; &lt;commit&gt;
-#&gt;   Version: 9eb068aef0f299cd011fc7b5db84237ce5b86e19
+#&gt;   Version: aa6fd931a73dee814401790c0367ac672711d975
 #&gt;   User: sckott
-#&gt;   Commited: 2015-05-01T04:10:34Z
+#&gt;   Commited: 2015-07-03T00:20:27Z
 #&gt;   Commits [total, additions, deletions]: [5,5,0]
 </code></pre>
 
@@ -470,7 +485,7 @@ x &lt;- letters
 #&gt;   URL: https://gist.github.com/7ddb9810fc99c84c65ec
 #&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2014-06-27T17:50:37Z / 2014-06-27T17:50:37Z
+#&gt;   Created/Edited: 2014-06-27T17:50:37Z / 2015-07-03T00:19:20Z
 #&gt;   Files: code.R, manifest.yml, rrt_manifest.yml
 #&gt;   Truncated?: FALSE, FALSE, FALSE
 </code></pre>
@@ -484,7 +499,7 @@ x &lt;- letters
 #&gt;   URL: https://gist.github.com/7ddb9810fc99c84c65ec
 #&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2014-06-27T17:50:37Z / 2014-06-27T17:50:37Z
+#&gt;   Created/Edited: 2014-06-27T17:50:37Z / 2015-07-03T00:20:29Z
 #&gt;   Files: code.R, manifest.yml, rrt_manifest.yml
 #&gt;   Truncated?: FALSE, FALSE, FALSE
 </code></pre>
@@ -503,20 +518,29 @@ x &lt;- letters
   update()
 </code></pre>
 
-<pre><code>#&gt; &lt;gist&gt;d5f968cef4c80e7ea9c3
-#&gt;   URL: https://gist.github.com/d5f968cef4c80e7ea9c3
+<pre><code>#&gt; &lt;gist&gt;f80330754db203f8bb03
+#&gt;   URL: https://gist.github.com/f80330754db203f8bb03
 #&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:34Z / 2015-05-01T04:10:36Z
+#&gt;   Created/Edited: 2015-07-03T00:20:27Z / 2015-07-03T00:20:29Z
 #&gt;   Files: alm.md, code.R
 #&gt;   Truncated?: FALSE, FALSE
 </code></pre>
 
 <p>Delete files</p>
 
-<pre><code class="r">gists(what = &quot;minepublic&quot;)[[1]]
-  delete_files(&quot;code.R&quot;) %&gt;%
+<pre><code class="r">gists(what = &quot;minepublic&quot;)[[1]] %&gt;% 
+  delete_files(file) %&gt;%
   update()
+</code></pre>
+
+<pre><code>#&gt; &lt;gist&gt;f80330754db203f8bb03
+#&gt;   URL: https://gist.github.com/f80330754db203f8bb03
+#&gt;   Description: 
+#&gt;   Public: TRUE
+#&gt;   Created/Edited: 2015-07-03T00:20:27Z / 2015-07-03T00:20:30Z
+#&gt;   Files: code.R
+#&gt;   Truncated?: FALSE
 </code></pre>
 
 <h2>Open a gist in your default browser</h2>
@@ -533,14 +557,14 @@ x &lt;- letters
 <pre><code class="r">gists()[[1]] %&gt;% embed()
 </code></pre>
 
-<pre><code>#&gt; [1] &quot;&lt;script src=\&quot;https://gist.github.com/sckott/d5f968cef4c80e7ea9c3.js\&quot;&gt;&lt;/script&gt;&quot;
+<pre><code>#&gt; [1] &quot;&lt;script src=\&quot;https://gist.github.com/sckott/f80330754db203f8bb03.js\&quot;&gt;&lt;/script&gt;&quot;
 </code></pre>
 
 <h3>List forks</h3>
 
 <p>Returns a list of <code>gist</code> objects, just like <code>gists()</code></p>
 
-<pre><code class="r">gist(id=&#39;1642874&#39;) %&gt;% forks(per_page=2)
+<pre><code class="r">gist(id = &#39;1642874&#39;) %&gt;% forks(per_page = 2)
 </code></pre>
 
 <pre><code>#&gt; [[1]]
@@ -548,7 +572,7 @@ x &lt;- letters
 #&gt;   URL: https://gist.github.com/1642989
 #&gt;   Description: Spline Transition
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2012-01-19T21:45:20Z / 2015-04-15T10:16:23Z
+#&gt;   Created/Edited: 2012-01-19T21:45:20Z / 2015-06-11T19:40:48Z
 #&gt;   Files: 
 #&gt;   Truncated?: 
 #&gt; 
@@ -557,7 +581,7 @@ x &lt;- letters
 #&gt;   URL: https://gist.github.com/1643051
 #&gt;   Description: Line Transition (Broken)
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2012-01-19T21:51:30Z / 2015-04-15T10:16:33Z
+#&gt;   Created/Edited: 2012-01-19T21:51:30Z / 2015-06-11T19:40:48Z
 #&gt;   Files: 
 #&gt;   Truncated?:
 </code></pre>
@@ -570,13 +594,13 @@ x &lt;- letters
 (forked &lt;- g[[ sample(seq_along(g), 1) ]] %&gt;% fork())
 </code></pre>
 
-<pre><code>#&gt; &lt;gist&gt;198a3d98aefe5432cedd
-#&gt;   URL: https://gist.github.com/198a3d98aefe5432cedd
+<pre><code>#&gt; &lt;gist&gt;9eff44494c12fcbc8590
+#&gt;   URL: https://gist.github.com/9eff44494c12fcbc8590
 #&gt;   Description: 
 #&gt;   Public: TRUE
-#&gt;   Created/Edited: 2015-05-01T04:10:37Z / 2015-05-01T04:10:37Z
-#&gt;   Files: Servidor.js
-#&gt;   Truncated?: FALSE
+#&gt;   Created/Edited: 2015-07-03T00:20:31Z / 2015-07-03T00:20:31Z
+#&gt;   Files: gistfile1.txt, gistfile2.txt
+#&gt;   Truncated?: FALSE, FALSE
 </code></pre>
 
 <h2>Example use case</h2>
@@ -587,8 +611,8 @@ x &lt;- letters
 
 <pre><code class="r">library(&#39;httr&#39;)
 base &lt;- &quot;http://pelias.mapzen.com/search&quot;
-res &lt;- GET(base, query = list(input = &#39;coffee shop&#39;, lat = 45.5, lon = -122.6))
-json &lt;- content(res, as = &quot;text&quot;)
+res &lt;- httr::GET(base, query = list(input = &#39;coffee shop&#39;, lat = 45.5, lon = -122.6))
+json &lt;- httr::content(res, &quot;text&quot;)
 gist_create(code = json, filename = &quot;pelias_test.geojson&quot;)
 #&gt; &lt;gist&gt;017214637bcfeb198070
 #&gt;   URL: https://gist.github.com/017214637bcfeb198070

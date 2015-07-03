@@ -72,6 +72,9 @@
 #' ## but will involve having to use git
 #' file <- system.file("examples", "plots.Rmd", package = "gistr")
 #' gist_create(file, knit=TRUE, imgur_inject = TRUE)
+#' ## works with ggplot2 as well
+#' file <- system.file("examples", "ggplot_imgur.Rmd", package = "gistr")
+#' gist_create(file, knit=TRUE)
 #'
 #' # Render `.R` files
 #' file <- system.file("examples", "example1.R", package = "gistr")
@@ -88,11 +91,16 @@
 #' file3 <- system.file("examples", "plots_imgur.Rmd", package = "gistr")
 #' gist_create(files=list(file1, file2, file3), knit = TRUE)
 #' gist_create(files=list(file1, file2, file3), knit = TRUE, include_source = TRUE)
+#' 
+#' # Use rmarkdown::render instead of knitr::knit
+#' file <- system.file("examples", "rmarkdown_eg.Rmd", package = "gistr")
+#' gist_create(file, knit = TRUE, rmarkdown = TRUE, imgur_inject = TRUE,
+#'    renderopts = list(output_format = "md_document"))
 #' }
 
 gist_create <- function(files=NULL, description = "", public = TRUE, browse = TRUE, code=NULL,
   filename="code.R", knit=FALSE, knitopts=list(), renderopts=list(), include_source = FALSE,
-  imgur_inject = FALSE, ...) {
+  imgur_inject = FALSE, rmarkdown = FALSE, ...) {
 
   if (!is.null(code)) files <- code_handler(code, filename)
   if (knit) {
@@ -106,15 +114,15 @@ gist_create <- function(files=NULL, description = "", public = TRUE, browse = TR
         writeLines(code, ff)
       }
       inject_imgur(ff, imgur_inject)
-      ff <- knit_render(ff, knitopts, renderopts)
+      ff <- knit_render(ff, knitopts, renderopts, rmarkdown)
       if (include_source) ff <- c(orig_files, ff)
       allfiles[[i]] <- ff
     }
   } else {
     allfiles <- files
   }
-  is_binary(allfiles)
-  is_dir(allfiles)
+  # is_binary(allfiles)
+  is_dir(unlist(allfiles))
   body <- creategist(unlist(allfiles), description, public)
   res <- gist_POST(paste0(ghbase(), '/gists'), gist_auth(), ghead(), body, ...)
   gist <- as.gist(res)
@@ -122,10 +130,10 @@ gist_create <- function(files=NULL, description = "", public = TRUE, browse = TR
   return( gist )
 }
 
-knit_render <- function(x, knitopts, renderopts) {
+knit_render <- function(x, knitopts, renderopts, rmarkdown) {
   if (grepl("\\.[rR]md$|\\.[rR]nw$", x)) {
     ext <- "knitr"
-  } else if (grepl("\\.[rR]$", x)) {
+  } else if (grepl("\\.[rR]$", x) || rmarkdown) {
     ext <- "rmarkdown"
   }
   switch(ext,
@@ -184,25 +192,25 @@ code_handler <- function(x, filename){
   writeLines(text, tmp)
   return(tmp)
 }
-
-is.binary <- function(x, maximum = 1000) {
-  if (!is.dir(x)) {
-    f <- file(x, "rb", raw = TRUE)
-    b <- readBin(f, "int", maximum, size = 1, signed = FALSE)
-    tmp <- suppressWarnings(max(b)) > 128
-    close.connection(f)
-    tmp
-  } else {
-    FALSE
-  }
-}
-
-is_binary <- function(x) {
-  bin <- vapply(x, is.binary, logical(1))
-  if (any(bin)) {
-    stop("Binary files not supported\n", x[bin], call. = FALSE)
-  }
-}
+ 
+# is.binary <- function(x, maximum = 1000) {
+#   if (!is.dir(x)) {
+#     f <- file(x, "rb", raw = TRUE)
+#     b <- readBin(f, "int", maximum, size = 1, signed = FALSE)
+#     tmp <- suppressWarnings(max(b)) > 128
+#     close.connection(f)
+#     tmp
+#   } else {
+#     FALSE
+#   }
+# }
+# 
+# is_binary <- function(x) {
+#   bin <- vapply(x, is.binary, logical(1))
+#   if (any(bin)) {
+#     stop("Binary files not supported\n", x[bin], call. = FALSE)
+#   }
+# }
 
 is.dir <- function(x) {
   file.info(x)$isdir

@@ -9,11 +9,15 @@
 #' @examples \dontrun{
 #' gist(id='1642874') %>% forks(per_page=2)
 #' gist(id = "8172796") %>% forks()
+#' 
+#' # pass in a url
+#' gist("https://gist.github.com/expersso/4ac33b9c00751fddc7f8") %>% forks 
 #' }
 
 forks <- function(gist, page=NULL, per_page=30, ...) {
   gist <- as.gist(gist)
   args <- gist_compact(list(page = page, per_page = per_page))
+  if (length(args) == 0) args <- NULL
   res <- gist_GET(sprintf('%s/gists/%s/forks', ghbase(), gist$id), gist_auth(), ghead(), args, ...)
   lapply(res, structure, class = "gist")
 }
@@ -23,7 +27,7 @@ forks <- function(gist, page=NULL, per_page=30, ...) {
 #' @export
 #' @param gist A gist object or something coerceable to a gist
 #' @param ... Further named args to \code{\link[httr]{GET}}
-#'#' @return A gist class object
+#' @return A gist class object
 #' @examples \dontrun{
 #' # fork a gist
 #' gists()[[1]] %>% fork()
@@ -34,7 +38,7 @@ forks <- function(gist, page=NULL, per_page=30, ...) {
 #' # extract the last one
 #' gist(id='1642874') %>%
 #'  forks() %>%
-#'  extract(length(.))
+#'  .[length(.)]
 #' }
 
 fork <- function(gist, ...) {

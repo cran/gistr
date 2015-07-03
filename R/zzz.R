@@ -18,7 +18,7 @@ payload <- function(filenames, description = "") {
          content = paste(readLines(tt, warn = FALSE), collapse = "\n"))
   })
   files <- c(add_update, del, ren)
-  names(files) <- basename(fnames)
+  names(files) <- base::basename(fnames)
   body <- list(description = description, files = files)
   jsonlite::toJSON(body, auto_unbox = TRUE)
 }
@@ -63,7 +63,7 @@ ghead <- function(){
   add_headers(`User-Agent` = "gistr", `Accept` = 'application/vnd.github.v3+json')
 }
 
-gist_GET <- function(url, auth, headers, args=list(), ...){
+gist_GET <- function(url, auth, headers, args=NULL, ...){
   response <- GET(url, auth, headers, query = args, ...)
   process(response)
 }
