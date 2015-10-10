@@ -1,12 +1,19 @@
 #' Create a gist via git instead of the GitHub Gists HTTP API
 #'
 #' @export
+#' 
 #' @template args
 #' @param artifacts (logical/character) Include artifacts or not. If \code{TRUE}, 
 #' includes all artifacts. Or you can pass in a file extension to only upload 
 #' artifacts of certain file exensions. Default: \code{FALSE}
 #' @param git_method (character) One of ssh (default) or https. If a remote already
 #' exists, we use that remote, and this parameter is ignored. 
+#' @param sleep (integer) Seconds to sleep after creating gist, but before 
+#' collecting metadata on the gist. If uploading a lot of stuff, you may want to
+#' set this to a higher value, otherwise, you may not get accurate metadata for
+#' your gist. You can of course always refresh afterwards by calling \code{gist}
+#' with your gist id.
+#' 
 #' @details Note that when \code{browse=TRUE} there is a slight delay in when 
 #' we open up the gist in your default browser and when the data will display 
 #' in the gist. We could have this function sleep a while and guess when it 
@@ -34,30 +41,68 @@
 #' }
 #' 
 #' Another difference between this function and \code{\link{gist_create}} is that
-#' this function can easily collect all artifacts coming out of a knit process.
+#' this function can collect all artifacts coming out of a knit process.
+#' 
+#' If a gist is somehow deleted, or the remote changes, when you try to push to the
+#' same gist again, everything should be fine. We now use \code{tryCatch} on the 
+#' push attempt, and if it fails, we'll add a new remote (which means a new gist), 
+#' and push again.
+#' 
 #' @seealso \code{\link{gist_create}}, \code{\link{gist_create_obj}}
+#' 
 #' @examples \dontrun{
 #' # prepare a directory and a file
+#' unlink("~/gitgist", recursive = TRUE)
 #' dir.create("~/gitgist")
 #' file <- system.file("examples", "stuff.md", package = "gistr")
 #' writeLines(readLines(file), con = "~/gitgist/stuff.md")
 #' 
 #' # create a gist
 #' gist_create_git(files = "~/gitgist/stuff.md")
-#' gist_create_git(files = c("~/gitgist/stuff.md", "~/gitgist/icanhazallthedata.md"))
-#' gist_create_git(files = "~/gitgist")
+#' 
+#' ## more than one file can be passed in
+#' unlink("~/gitgist2", recursive = TRUE)
+#' dir.create("~/gitgist2")
+#' file.copy(file, "~/gitgist2/")
+#' cat("hello world", file = "~/gitgist2/hello_world.md")
+#' list.files("~/gitgist2")
+#' gist_create_git(c("~/gitgist2/stuff.md", "~/gitgist2/hello_world.md"))
+#' 
+#' # Include all files in a directory
+#' unlink("~/gitgist3", recursive = TRUE)
+#' dir.create("~/gitgist3")
+#' cat("foo bar", file="~/gitgist3/foobar.txt")
+#' cat("hello", file="~/gitgist3/hello.txt")
+#' list.files("~/gitgist3")
+#' gist_create_git("~/gitgist3")
 #' 
 #' # binary files
-#' gist_create_git(files = "~/gitgist/ropensci_add.png")
+#' png <- system.file("examples", "file.png", package = "gistr")
+#' unlink("~/gitgist4", recursive = TRUE)
+#' dir.create("~/gitgist4")
+#' file.copy(png, "~/gitgist4/")
+#' list.files("~/gitgist4")
+#' gist_create_git(files = "~/gitgist4/file.png")
 #' 
 #' # knit files first, then push up
-#' gist_create_git(files = "~/gitgistknit/plots.Rmd", knit = TRUE)
+#' # note: by default we don't upload images, but you can do that, see next example
+#' rmd <- system.file("examples", "plots.Rmd", package = "gistr")
+#' unlink("~/gitgist5", recursive = TRUE)
+#' dir.create("~/gitgist5")
+#' file.copy(rmd, "~/gitgist5/")
+#' list.files("~/gitgist5")
+#' gist_create_git("~/gitgist5/plots.Rmd", knit = TRUE)
 #' 
 #' # collect all/any artifacts from knitting process
-#' gist_create_git("~/gitgistartifacts/artifacts_eg1.Rmd", knit = TRUE, 
+#' arts <- system.file("examples", "artifacts_eg1.Rmd", package = "gistr")
+#' unlink("~/gitgist6", recursive = TRUE)
+#' dir.create("~/gitgist6")
+#' file.copy(arts, "~/gitgist6/")
+#' list.files("~/gitgist6")
+#' gist_create_git("~/gitgist6/artifacts_eg1.Rmd", knit = TRUE, 
 #'    artifacts = TRUE)
 #' 
-#' # from code
+#' # from a code block
 #' gist_create_git(code={'
 #' x <- letters
 #' numbers <- runif(8)
@@ -66,21 +111,20 @@
 #' [1] 0.3229318 0.5933054 0.7778408 0.3898947 0.1309717 0.7501378 0.3206379 0.3379005
 #' '}, filename="my_cool_code.R")
 #' 
-#' # include artifacts, e.g., images created during knit process
-#' file <- system.file("examples", "plots.Rmd", package = "gistr")
-#' dir <- tempdir()
-#' file.copy(file, dir)
-#' file <- file.path(dir, "plots.Rmd")
-#' setwd(dir)
-#' gist_create_git(file)
-#' gist_create_git(file, knit = TRUE)
-#' gist_create_git(file, knit = TRUE, artifacts = TRUE)
+#' # Use https instead of ssh
+#' png <- system.file("examples", "file.png", package = "gistr")
+#' unlink("~/gitgist7", recursive = TRUE)
+#' dir.create("~/gitgist7")
+#' file.copy(png, "~/gitgist7/")
+#' list.files("~/gitgist7")
+#' gist_create_git(files = "~/gitgist7/file.png", git_method = "https")
 #' }
 
 gist_create_git <- function(files = NULL, description = "", public = TRUE, browse = TRUE,
   knit = FALSE, code = NULL, filename = "code.R",
   knitopts=list(), renderopts=list(), include_source = FALSE, 
-  artifacts = FALSE, imgur_inject = FALSE, git_method = "ssh", ...) {
+  artifacts = FALSE, imgur_inject = FALSE, git_method = "ssh", 
+  sleep = 1, ...) {
   
   if (!requireNamespace("git2r", quietly = TRUE)) {
     stop("Please install git2r", call. = FALSE)
@@ -117,7 +161,7 @@ gist_create_git <- function(files = NULL, description = "", public = TRUE, brows
       if (include_source) ff <- c(orig_files, ff)
       allfiles[[i]] <- ff
     }
-    allfiles <- unlist(allfiles)
+    allfiles <- path.expand(unlist(allfiles))
   } else {
     allfiles <- path.expand(files)
   }
@@ -139,15 +183,39 @@ gist_create_git <- function(files = NULL, description = "", public = TRUE, brows
   ra <- tryCatch(git2r::remote_add(git, "gistr", url), error = function(e) e)
   if (is(ra, "error")) message(strsplit(ra$message, ":")[[1]][[2]])
   # push up files
+  push_msg <- "Old remote not found on GitHub Gists\nAdding new remote\nRe-attempting push"
   if (git_method == "ssh") {
-    git2r::push(git, "gistr", "refs/heads/master", force = TRUE)
+    trypush <- tryCatch(git2r::push(git, "gistr", "refs/heads/master", force = TRUE), 
+                        error = function(e) e)
+    if (is(trypush, "error")) {
+      message(push_msg)
+      git2r::remote_remove(git, "gistr")
+      git2r::remote_add(git, "gistr", url)
+      git2r::push(git, "gistr", "refs/heads/master", force = TRUE)
+    }
   } else {
     cred <- git2r::cred_env("GITHUB_USERNAME", "GITHUB_PAT")
-    git2r::push(git, "gistr", "refs/heads/master", force = TRUE, credentials = cred)
+    trypush <- tryCatch(git2r::push(git, "gistr", "refs/heads/master", force = TRUE, credentials = cred),
+                        error = function(e) e)
+    if (is(trypush, "error")) {
+      message(push_msg)
+      git2r::remote_remove(git, "gistr")
+      git2r::remote_add(git, "gistr", url)
+      git2r::push(git, "gistr", "refs/heads/master", force = TRUE, credentials = cred)
+    }
   }
+  
+  # wait a bit before collecting metadata
+  Sys.sleep(sleep)
+  
   # refresh gist metadata
   gst <- gist(gst$id)
   message("The file list for your gist may not be accurate if you are uploading a lot of files")
+  message("Refresh the gist page if your files aren't there")
+  
+  # cleanup any temporary directories
+  # unlink(dirname(allfiles[[1]]), recursive = TRUE, force = TRUE)
+  
   # browse
   if (browse) browse(gst)
   return( gst )
@@ -166,6 +234,7 @@ makefiles <- function(x) {
 }
 
 unpack <- function(z) {
+  if (!file.exists(z)) stop(sprintf("'%s' does not exist", z), call. = FALSE)
   if (file.info(z)$isdir) {
     list.files(z, full.names = TRUE)
   } else {
