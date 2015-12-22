@@ -1,7 +1,6 @@
 # Function that takes a list of files and creates payload for API
-# @importFrom jsonlite toJSON auto_unbox
-# @param filenames names of files to post
-# @param description brief description of gist (optional)
+# :param filenames names of files to post
+# :param description brief description of gist (optional)
 payload <- function(filenames, description = "") {
   add <- filenames$add
   update <- filenames$update
@@ -11,7 +10,8 @@ payload <- function(filenames, description = "") {
   add_update <- lapply(c(add, update), function(file) {
     list(content = paste(readLines(file, warn = FALSE), collapse = "\n"))
   })
-  del <- lapply(delete, function(file) structure("null", names=file))
+  # del <- lapply(delete, function(file) structure(list(NULL), names = basename(file)))
+  del <- do.call("c", unname(Map(function(x) setNames(list(NULL), x), sapply(delete, basename))))
   ren <- lapply(rename, function(f) {
     tt <- f[[1]]
     list(filename = basename(f[[2]]),
@@ -20,7 +20,7 @@ payload <- function(filenames, description = "") {
   files <- c(add_update, del, ren)
   names(files) <- base::basename(fnames)
   body <- list(description = description, files = files)
-  jsonlite::toJSON(body, auto_unbox = TRUE)
+  jsonlite::toJSON(body, auto_unbox = TRUE, null = "null")
 }
 
 creategist <- function(filenames, description = "", public = TRUE) {
@@ -69,7 +69,7 @@ gist_GET <- function(url, auth, headers, args=NULL, ...){
 }
 
 gist_PATCH <- function(id, auth, headers, body, ...){
-  response <- PATCH(paste0(ghbase(), '/gists/', id), auth, headers, body = body, encode = "json", ...)
+  response <- PATCH(paste0(ghbase(), '/gists/', id), auth, headers, body = body, encode = "json")
   process(response)
 }
 
@@ -101,7 +101,7 @@ stopstatus <- function(x) {
   }
 }
 
-check_auth <- function(x) if(!missing(x)) x else gist_auth()
+check_auth <- function(x) if (!missing(x)) x else gist_auth()
 
 strextract <- function(str, pattern) {
   regmatches(str, regexpr(pattern, str))

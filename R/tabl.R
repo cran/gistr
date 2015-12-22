@@ -1,8 +1,6 @@
 #' Make a table from gist or commit class or a list of either
 #' 
 #' @export
-#' @importFrom dplyr rbind_all as_data_frame 
-#' @importFrom jsonlite flatten
 #' @param x Either a gist or commit class object or a list of either
 #' @param ... Ignored
 #' @return A data.frame or list of data.frame's
@@ -52,7 +50,6 @@
 #' gist('1642874') %>% tabl
 #' 
 #' # gist with history, no forks
-#' gist('030adf9eaa7b9b8c280e') %>% tabl
 #' gist('c96d2e453c95d0166408') %>% tabl 
 #' }
 tabl <- function(x, ...) {
