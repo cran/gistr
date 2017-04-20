@@ -2,8 +2,8 @@
 % Please edit documentation in R/star.R
 \name{star}
 \alias{star}
-\alias{star_check}
 \alias{unstar}
+\alias{star_check}
 \title{Star a gist}
 \usage{
 star(gist, ...)
@@ -25,7 +25,7 @@ Star a gist
 }
 \examples{
 \dontrun{
-id <- '7ddb9810fc99c84c65ec'
+id <- '4ac33b9c00751fddc7f8'
 gist(id) \%>\% star()
 gist(id) \%>\% star_check()
 gist(id) \%>\% unstar()
@@ -41,4 +41,3 @@ gist(x) \%>\% star
 gist(x) \%>\% unstar
 }
 }
-

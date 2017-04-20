@@ -2,15 +2,15 @@
 % Please edit documentation in R/gistr-package.R
 \docType{package}
 \name{gistr-package}
-\alias{gistr}
 \alias{gistr-package}
+\alias{gistr}
 \title{R client for GitHub gists}
 \description{
 R client for GitHub gists.
 }
 \details{
-gistr allows you to peform actions on gists, including listing, forking, starring, creating,
-deleting, updating, etc.
+gistr allows you to peform actions on gists, including listing, forking, 
+starring, creating, deleting, updating, etc.
 
 There are two ways to authorise gistr to work with your GitHub account:
 
@@ -31,4 +31,3 @@ Ramnath Vaidyanathan \email{ramnath.vaidya@gmail.com}
 Karthik Ram \email{karthik.ram@gmail.com}
 }
 \keyword{package}
-
