@@ -4,32 +4,39 @@
 \alias{gist_create_obj}
 \title{Create a gist from an R object}
 \usage{
-gist_create_obj(x = NULL, description = "", public = TRUE,
-  browse = TRUE, pretty = TRUE, filename = "file.txt", ...)
+gist_create_obj(
+  x = NULL,
+  description = "",
+  public = TRUE,
+  browse = TRUE,
+  pretty = TRUE,
+  filename = "file.txt",
+  ...
+)
 }
 \arguments{
 \item{x}{An R object, any of data.frame, matrix, list, character, numeric}
 
 \item{description}{(character) Brief description of gist (optional)}
 
-\item{public}{(logical) Whether gist is public (default: TRUE)}
+\item{public}{(logical) Whether gist is public (default: \code{TRUE})}
 
-\item{browse}{(logical) To open newly create gist in default browser 
-(default: TRUE)}
+\item{browse}{(logical) To open newly create gist in default browser
+(default: \code{TRUE})}
 
 \item{pretty}{(logical) For data.frame and matrix objects, create
-a markdown table. If FALSE, pushes up json. (default: TRUE)}
+a markdown table. If FALSE, pushes up json. (default: \code{TRUE})}
 
 \item{filename}{Name of the file to create. Default: \code{file.txt}}
 
-\item{...}{Further args passed on to \code{link[httr]{POST}}}
+\item{...}{Further args passed on to \code{\link[httr:POST]{httr::POST()}}}
 }
 \description{
 Create a gist from an R object
 }
 \details{
-This function is specifically for going from R objects to a gist, 
-whereas \code{\link{gist_create}} is for going from files or executing code
+This function is specifically for going from R objects to a gist,
+whereas \code{\link[=gist_create]{gist_create()}} is for going from files or executing code
 }
 \examples{
 \dontrun{
@@ -58,5 +65,5 @@ hey there!", filename = "my_markdown.md")
 }
 }
 \seealso{
-\code{\link{gist_create}}, \code{\link{gist_create_git}}
+\code{\link[=gist_create]{gist_create()}}, \code{\link[=gist_create_git]{gist_create_git()}}
 }

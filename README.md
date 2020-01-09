@@ -3,11 +3,12 @@ gistr
 
 
 
+[![cran checks](https://cranchecks.info/badges/worst/gistr)](https://cranchecks.info/pkgs/gistr)
 [![Build Status](https://api.travis-ci.org/ropensci/gistr.png)](https://travis-ci.org/ropensci/gistr)
 [![Build status](https://ci.appveyor.com/api/projects/status/4jmuxbbv8qg4139t/branch/master?svg=true)](https://ci.appveyor.com/project/sckott/gistr/branch/master)
 [![codecov.io](https://codecov.io/github/ropensci/gistr/coverage.svg?branch=master)](https://codecov.io/github/ropensci/gistr?branch=master)
-[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/gistr)](https://github.com/metacran/cranlogs.app)
-[![cran version](http://www.r-pkg.org/badges/version/gistr)](https://cran.r-project.org/package=gistr)
+[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/gistr)](https://github.com/metacran/cranlogs.app)
+[![cran version](https://www.r-pkg.org/badges/version/gistr)](https://cran.r-project.org/package=gistr)
 
 `gistr` is a light interface to GitHub's gists for R.
 
@@ -15,6 +16,7 @@ gistr
 
 * [rgithub](https://github.com/cscheid/rgithub) an R client for the Github API by Carlos Scheidegger
 * [git2r](https://github.com/ropensci/git2r) an R client for the libgit2 C library by Stefan Widgren
+* [gert](https://github.com/r-lib/gert) Simple git client for R by Jeroen Ooms
 * [gistfo](https://github.com/MilesMcBain/gistfo) for turning your untitled RStudio tabs into gists!
 
 ## Quick start
@@ -44,7 +46,7 @@ library("gistr")
 
 There are two ways to authorise gistr to work with your GitHub account:
 
-* Generate a personal access token (PAT) at [https://help.github.com/articles/creating-an-access-token-for-command-line-use](https://help.github.com/articles/creating-an-access-token-for-command-line-use) and record it in the `GITHUB_PAT` environment variable.
+* Generate a personal access token (PAT) **with the gist scope selected** at [https://help.github.com/articles/creating-an-access-token-for-command-line-use](https://help.github.com/articles/creating-an-access-token-for-command-line-use) and record it in the `GITHUB_PAT` environment variable.
   - To test out this approach, execute this in R: `Sys.setenv(GITHUB_PAT = "blahblahblah")`, where "blahblahblah" is the PAT you got from GitHub. Then take `gistr` out for a test drive.
   - If that works, you will probably want to define the GITHUB_PAT environment variable in a file such as `~/.bash_profile` or `~/.Renviron`.
 * Interactively login into your GitHub account and authorise with OAuth.
@@ -94,8 +96,8 @@ update(add_files(gists(what = "minepublic")[[1]], file))
 ```r
 rate_limit()
 #> Rate limit: 5000
-#> Remaining:  4975
-#> Resets in:  56 minutes
+#> Remaining:  4999
+#> Resets in:  60 minutes
 ```
 
 ### List gists
@@ -106,21 +108,21 @@ Limiting to a few results here to keep it brief
 ```r
 gists(per_page = 2)
 #> [[1]]
-#> <gist>6ac700bec42f7563bf809d8d92ae4906
-#>   URL: https://gist.github.com/6ac700bec42f7563bf809d8d92ae4906
-#>   Description: Password Dictionary for Brute force attack
+#> <gist>04b88f61e1e6c457354958c1e47c9bea
+#>   URL: https://gist.github.com/04b88f61e1e6c457354958c1e47c9bea
+#>   Description: 
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:25:21Z / 2018-04-16T21:25:22Z
-#>   Files: dictionary.txt
+#>   Created/Edited: 2020-01-09T18:02:08Z / 2020-01-09T18:02:09Z
+#>   Files: maestra.blade.php
 #>   Truncated?: FALSE
 #> 
 #> [[2]]
-#> <gist>89df33d7a21ed92d2fad5c4cec96f8ae
-#>   URL: https://gist.github.com/89df33d7a21ed92d2fad5c4cec96f8ae
-#>   Description: Export documents to a zip file
+#> <gist>137ec8aa8c62a44d6b25afe94c1572ce
+#>   URL: https://gist.github.com/137ec8aa8c62a44d6b25afe94c1572ce
+#>   Description: 
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:25:03Z / 2018-04-16T21:25:04Z
-#>   Files: export_zip.xqy
+#>   Created/Edited: 2020-01-09T18:01:41Z / 2020-01-09T18:01:42Z
+#>   Files: CalciteLib.java
 #>   Truncated?: FALSE
 ```
 
@@ -130,21 +132,21 @@ Since a certain date/time
 ```r
 gists(since='2014-05-26T00:00:00Z', per_page = 2)
 #> [[1]]
-#> <gist>6ac700bec42f7563bf809d8d92ae4906
-#>   URL: https://gist.github.com/6ac700bec42f7563bf809d8d92ae4906
-#>   Description: Password Dictionary for Brute force attack
+#> <gist>04b88f61e1e6c457354958c1e47c9bea
+#>   URL: https://gist.github.com/04b88f61e1e6c457354958c1e47c9bea
+#>   Description: 
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:25:21Z / 2018-04-16T21:25:22Z
-#>   Files: dictionary.txt
+#>   Created/Edited: 2020-01-09T18:02:08Z / 2020-01-09T18:02:09Z
+#>   Files: maestra.blade.php
 #>   Truncated?: FALSE
 #> 
 #> [[2]]
-#> <gist>89df33d7a21ed92d2fad5c4cec96f8ae
-#>   URL: https://gist.github.com/89df33d7a21ed92d2fad5c4cec96f8ae
-#>   Description: Export documents to a zip file
+#> <gist>137ec8aa8c62a44d6b25afe94c1572ce
+#>   URL: https://gist.github.com/137ec8aa8c62a44d6b25afe94c1572ce
+#>   Description: 
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:25:03Z / 2018-04-16T21:25:04Z
-#>   Files: export_zip.xqy
+#>   Created/Edited: 2020-01-09T18:01:41Z / 2020-01-09T18:01:42Z
+#>   Files: CalciteLib.java
 #>   Truncated?: FALSE
 ```
 
@@ -154,22 +156,22 @@ Request different types of gists, one of public, minepublic, mineall, or starred
 ```r
 gists('minepublic', per_page = 2)
 #> [[1]]
-#> <gist>d6c06c121e70016e1caf159c7d7b6aa6
-#>   URL: https://gist.github.com/d6c06c121e70016e1caf159c7d7b6aa6
-#>   Description: 
+#> <gist>fc231d025d54c1a1cb3d37f9790b9166
+#>   URL: https://gist.github.com/fc231d025d54c1a1cb3d37f9790b9166
+#>   Description: gist gist gist
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:24:47Z / 2018-04-16T21:24:55Z
-#>   Files: code.R
-#>   Truncated?: FALSE
+#>   Created/Edited: 2020-01-08T17:39:13Z / 2020-01-08T17:39:15Z
+#>   Files: stuff.md, zoo.json
+#>   Truncated?: FALSE, FALSE
 #> 
 #> [[2]]
-#> <gist>f271bcf55ad2e17c34f4e99e2458d232
-#>   URL: https://gist.github.com/f271bcf55ad2e17c34f4e99e2458d232
-#>   Description: a new cool gist
+#> <gist>1f5ab3d71680e0d014ead0e8f2cc5b26
+#>   URL: https://gist.github.com/1f5ab3d71680e0d014ead0e8f2cc5b26
+#>   Description: gist gist gist
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:24:46Z / 2018-04-16T21:24:46Z
-#>   Files: stuff.md
-#>   Truncated?: FALSE
+#>   Created/Edited: 2020-01-08T17:38:24Z / 2020-01-08T17:38:25Z
+#>   Files: stuff.md, zoo.json
+#>   Truncated?: FALSE, FALSE
 ```
 
 
@@ -195,11 +197,11 @@ You can pass in files
 ```r
 file <- system.file("examples", "stuff.md", package = "gistr")
 gist_create(file, description='a new cool gist', browse = FALSE)
-#> <gist>7563b7654b15a8c4cc9f69880ae78d18
-#>   URL: https://gist.github.com/7563b7654b15a8c4cc9f69880ae78d18
+#> <gist>c0e374bc494c17cf0cd6bacc3e3ac146
+#>   URL: https://gist.github.com/c0e374bc494c17cf0cd6bacc3e3ac146
 #>   Description: a new cool gist
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:25:58Z / 2018-04-16T21:25:58Z
+#>   Created/Edited: 2020-01-09T18:02:40Z / 2020-01-09T18:02:40Z
 #>   Files: stuff.md
 #>   Truncated?: FALSE
 ```
@@ -226,11 +228,11 @@ numbers
 
 [1] 0.3229318 0.5933054 0.7778408 0.3898947 0.1309717 0.7501378 0.3206379 0.3379005
 '}, browse=FALSE)
-#> <gist>b7f90fcb99dae005db9d837f1a21ee03
-#>   URL: https://gist.github.com/b7f90fcb99dae005db9d837f1a21ee03
+#> <gist>1af2ae5eeccb9fe88391952253f4b9ed
+#>   URL: https://gist.github.com/1af2ae5eeccb9fe88391952253f4b9ed
 #>   Description: 
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:26:00Z / 2018-04-16T21:26:00Z
+#>   Created/Edited: 2020-01-09T18:02:43Z / 2020-01-09T18:02:43Z
 #>   Files: code.R
 #>   Truncated?: FALSE
 ```
@@ -275,11 +277,11 @@ knit a local file
 ```r
 file <- system.file("examples", "stuff.Rmd", package = "gistr")
 run(file, knitopts = list(quiet=TRUE)) %>% gist_create(browse = FALSE)
-#> <gist>5f05cf24cf459e0818ae2e128c14f301
-#>   URL: https://gist.github.com/5f05cf24cf459e0818ae2e128c14f301
+#> <gist>697796181d98bd0483301171f85f335e
+#>   URL: https://gist.github.com/697796181d98bd0483301171f85f335e
 #>   Description: 
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:26:01Z / 2018-04-16T21:26:01Z
+#>   Created/Edited: 2020-01-09T18:02:44Z / 2020-01-09T18:02:44Z
 #>   Files: stuff.md
 #>   Truncated?: FALSE
 ```
@@ -344,9 +346,9 @@ gist_create(file, knit=TRUE, imgur_inject = TRUE)
 gists()[[1]] %>% commits()
 #> [[1]]
 #> <commit>
-#>   Version: bf6f7fcb219bed1ac3de465f707d17d344da4c22
+#>   Version: 120981f13c1406f61f213775ce3677a23a7151e2
 #>   User: sckott
-#>   Commited: 2018-04-16T21:25:59Z
+#>   Commited: 2020-01-09T18:02:42Z
 #>   Commits [total, additions, deletions]: [5,5,0]
 ```
 
@@ -367,6 +369,7 @@ gist('cbb0507082bb18ff7e4b') %>% star()
 ```
 
 Unstar
+
 
 ```r
 gist('cbb0507082bb18ff7e4b') %>% unstar()
@@ -389,11 +392,11 @@ file <- system.file("examples", "alm.md", package = "gistr")
 gists(what = "minepublic")[[1]] %>%
   add_files(file) %>%
   update()
-#> <gist>b7f90fcb99dae005db9d837f1a21ee03
-#>   URL: https://gist.github.com/b7f90fcb99dae005db9d837f1a21ee03
+#> <gist>1af2ae5eeccb9fe88391952253f4b9ed
+#>   URL: https://gist.github.com/1af2ae5eeccb9fe88391952253f4b9ed
 #>   Description: 
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:26:00Z / 2018-04-16T21:26:25Z
+#>   Created/Edited: 2020-01-09T18:02:43Z / 2020-01-09T18:02:50Z
 #>   Files: alm.md, code.R
 #>   Truncated?: FALSE, FALSE
 ```
@@ -406,11 +409,11 @@ file <- system.file("examples", "alm.md", package = "gistr")
 gists(what = "minepublic")[[1]] %>%
   delete_files(file) %>%
   update()
-#> <gist>b7f90fcb99dae005db9d837f1a21ee03
-#>   URL: https://gist.github.com/b7f90fcb99dae005db9d837f1a21ee03
+#> <gist>1af2ae5eeccb9fe88391952253f4b9ed
+#>   URL: https://gist.github.com/1af2ae5eeccb9fe88391952253f4b9ed
 #>   Description: 
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:26:00Z / 2018-04-16T21:26:26Z
+#>   Created/Edited: 2020-01-09T18:02:43Z / 2020-01-09T18:02:52Z
 #>   Files: code.R
 #>   Truncated?: FALSE
 ```
@@ -429,7 +432,7 @@ gists()[[1]] %>% browse()
 
 ```r
 gists()[[1]] %>% embed()
-#> [1] "<script src=\"https://gist.github.com/sckott/b7f90fcb99dae005db9d837f1a21ee03.js\"></script>"
+#> [1] "<script src=\"https://gist.github.com/sckott/1af2ae5eeccb9fe88391952253f4b9ed.js\"></script>"
 ```
 
 ### List forks
@@ -444,7 +447,7 @@ gist(id='1642874') %>% forks(per_page=2)
 #>   URL: https://gist.github.com/1642989
 #>   Description: Spline Transition
 #>   Public: TRUE
-#>   Created/Edited: 2012-01-19T21:45:20Z / 2018-02-07T07:49:17Z
+#>   Created/Edited: 2012-01-19T21:45:20Z / 2019-10-23T20:09:07Z
 #>   Files: 
 #>   Truncated?: 
 #> 
@@ -453,7 +456,7 @@ gist(id='1642874') %>% forks(per_page=2)
 #>   URL: https://gist.github.com/1643051
 #>   Description: Line Transition (Broken)
 #>   Public: TRUE
-#>   Created/Edited: 2012-01-19T21:51:30Z / 2016-12-01T07:19:06Z
+#>   Created/Edited: 2012-01-19T21:51:30Z / 2019-10-23T20:08:44Z
 #>   Files: 
 #>   Truncated?:
 ```
@@ -466,12 +469,12 @@ Returns a `gist` object
 ```r
 g <- gists()
 (forked <- g[[ sample(seq_along(g), 1) ]] %>% fork())
-#> <gist>ca541fdae95e8a2e009bea872595bd2b
-#>   URL: https://gist.github.com/ca541fdae95e8a2e009bea872595bd2b
-#>   Description: 
+#> <gist>93c7894c4eb5b0b9fcfaa1d223d6b46e
+#>   URL: https://gist.github.com/93c7894c4eb5b0b9fcfaa1d223d6b46e
+#>   Description: fsadfds
 #>   Public: TRUE
-#>   Created/Edited: 2018-04-16T21:26:33Z / 2018-04-16T21:26:33Z
-#>   Files: .py
+#>   Created/Edited: 2020-01-09T18:03:00Z / 2020-01-09T18:03:00Z
+#>   Files: fsdfas
 #>   Truncated?: FALSE
 ```
 
@@ -500,13 +503,15 @@ gist_create(code = json, filename = "pelias_test.geojson")
 
 And here's that [gist](https://gist.github.com/sckott/017214637bcfeb198070)
 
-![pelias img](inst/img/gistr_ss.png)
+![pelias img](man/figures/gistr_ss.png)
 
 ## Meta
 
 * Please [report any issues or bugs](https://github.com/ropensci/gistr/issues).
 * License: MIT
 * Get citation information for `gistr` in R doing `citation(package = 'gistr')`
-* Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+* Please note that this project is released with a [Contributor Code of Conduct][coc]. By participating in this project you agree to abide by its terms.
 
 [![rofooter](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
+
+[coc]: https://github.com/ropensci/gistr/blob/master/CODE_OF_CONDUCT.md

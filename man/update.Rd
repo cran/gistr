@@ -13,6 +13,9 @@ update(gist, description = gist$description, ...)
 
 \item{...}{Curl options passed on to \code{\link[httr]{GET}}}
 }
+\value{
+an object of class \code{gist}
+}
 \description{
 Update/modify a gist
 }

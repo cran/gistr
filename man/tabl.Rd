@@ -21,11 +21,11 @@ A data.frame or list of data.frame's
 Make a table from gist or commit class or a list of either
 }
 \details{
-For commits we return a single data.frame. For gists, we always 
-return a list so that we are returning data consistently, 
-regardless of variable return data. So you can always index to the main 
-data.frame with gist metadata and file info by doing \code{result$data}, 
-and likewise for  forks \code{result$forks} and history 
+For commits we return a single data.frame. For gists, we always
+return a list so that we are returning data consistently,
+regardless of variable return data. So you can always index to the main
+data.frame with gist metadata and file info by doing \code{result$data},
+and likewise for  forks \code{result$forks} and history
 \code{result$history}
 }
 \examples{
