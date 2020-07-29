@@ -39,24 +39,24 @@ parameter is used. Default to \code{code.R}}
 
 \item{knit}{(logical) Knit code before posting as a gist? If the file
 has a \code{.Rmd}  or \code{.Rnw} extension, we run the file with
-\code{link[knitr]{knit}}, and if it has a \code{.R} extension, then
+\code{\link[knitr]{knit}}, and if it has a \code{.R} extension, then
 we use \code{\link[rmarkdown]{render}}}
 
 \item{knitopts, renderopts}{(list) List of variables passed on to
-\code{link[knitr]{knit}}, or \code{\link[rmarkdown]{render}}}
+\code{\link[knitr]{knit}}, or \code{\link[rmarkdown]{render}}}
 
 \item{include_source}{(logical) Only applies if \code{knit=TRUE}. Include
 source file in the gist in addition to the knitted output.}
 
 \item{imgur_inject}{(logical) Inject \code{\link[knitr]{imgur_upload}}
-into your \code{.Rmd} file to upload files to \url{http://imgur.com/}.
+into your \code{.Rmd} file to upload files to \url{https://imgur.com/}.
 This will be ignored  if the file is a sweave/latex file because the
 rendered pdf can't be uploaded anyway. Default: FALSE}
 
 \item{rmarkdown}{(logical) If \code{TRUE}, use \code{\link[rmarkdown:render]{rmarkdown::render()}} instead of
 \code{\link[knitr:knit]{knitr::knit()}} to render the document.}
 
-\item{...}{Further args passed on to \code{link[httr]{POST}}}
+\item{...}{Further args passed on to \code{\link[crul]{verb-POST}}}
 }
 \description{
 Create a gist
@@ -100,10 +100,8 @@ x <- letters
 ```
 '}, knit=TRUE)
 
-library('httr')
-url <- "https://github.com/ropensci/geojsonio/blob/master/inst/examples/zillow_or.geojson"
-res <- httr::GET(url)
-json <- httr::content(res, as = "text")
+url <- "https://raw.githubusercontent.com/ropensci/geojsonio/master/inst/examples/zillow_or.geojson"
+json <- crul::HttpClient$new(url)$get()$parse("UTF-8")
 gist_create(code = json, filename = "zillow_or.geojson")
 
 # Knit and include source file, so both files are in the gist
